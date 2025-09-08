@@ -41,6 +41,71 @@
             text-shadow: 0 2px 4px rgba(101, 67, 33, 0.1);
         }
 
+       /* 成功頁面樣式 */
+.success-page {
+    display: none;
+    text-align: center;
+    padding: 80px 40px;
+    background: rgba(255, 248, 240, 0.95);
+    border-radius: 20px;
+    border: 3px solid rgba(139, 105, 73, 0.3);
+    box-shadow: 0 15px 35px rgba(101, 67, 33, 0.2);
+    backdrop-filter: blur(15px);
+    position: relative;
+    overflow: hidden;
+}
+
+.success-page::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #8b6949, #d2b48c, #8b6949);
+    border-radius: 20px 20px 0 0;
+}
+
+.success-page.show {
+    display: block !important;
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.success-title {
+    font-size: 32px;
+    color: #654321;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(101, 67, 33, 0.1);
+    letter-spacing: 1px;
+}
+
+.success-icon {
+            font-size: 120px;
+            color: #32CD32;
+            margin-bottom: 20px;
+        }
+
+.success-text {
+    font-size: 18px;
+    color: #8b6949;
+    line-height: 1.8;
+    margin-bottom: 40px;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: 500;
+}
+
+        /* 表單內容區域 */
+        .form-content {
+            display: block;
+        }
+
+        .form-content.hide {
+            display: none !important;
+        }
+
         .card-preview {
             margin-bottom: 25px;
             text-align: center;
@@ -123,34 +188,74 @@
             resize: vertical;
         }
 
+        /* 修正的檔案上傳樣式 */
         .file-upload {
             position: relative;
-            display: inline-block;
             width: 100%;
         }
 
-        .file-input {
+        .file-input-display {
             width: 100%;
-            padding: 12px 15px;
+            padding: 20px 15px;
             border: 2px dashed #d2b48c;
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.98);
+            background: rgba(255, 255, 255, 0.9);
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            position: relative;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
-        .file-input:hover {
+        .file-input-display:hover {
             border-color: #8b6949;
             background: rgba(255, 255, 255, 1);
+            transform: translateY(-1px);
         }
 
-        input[type="file"] {
+        .file-input-display.drag-over {
+            border-color: #8b6949;
+            background: rgba(255, 255, 255, 1);
+            box-shadow: 0 0 10px rgba(139, 105, 73, 0.2);
+        }
+
+        /* 隱藏原始檔案輸入 */
+        .file-input-hidden {
             position: absolute;
             opacity: 0;
             width: 100%;
             height: 100%;
             cursor: pointer;
+            top: 0;
+            left: 0;
+        }
+
+        .upload-icon {
+            font-size: 24px;
+            color: #8b6949;
+            margin-bottom: 8px;
+        }
+
+        .upload-text {
+            color: #654321;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .upload-hint {
+            color: #8b6949;
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .file-selected {
+            color: #654321;
+            font-weight: bold;
+            font-size: 14px;
         }
 
         .submit-btn {
@@ -177,17 +282,6 @@
 
         .submit-btn:active {
             transform: translateY(0);
-        }
-
-        .success-message {
-            display: none;
-            background: linear-gradient(135deg, #90EE90, #32CD32);
-            color: #006400;
-            padding: 15px;
-            border-radius: 8px;
-            text-align: center;
-            font-weight: bold;
-            margin-top: 20px;
         }
 
         .error-message {
@@ -222,107 +316,118 @@
     <div class="form-container">
         <h1 class="form-title">商務名片資料表</h1>
         
-        <!-- 名片預覽區域 -->
-        <div class="card-preview" id="cardPreview">
-            <div class="card-preview-title">目前名片</div>
-            <img id="previewImage" alt="名片預覽">
+        <!-- 提交成功頁面 -->
+        <div class="success-page" id="successPage">
+            <div class="success-icon">🎉</div>
+            <div class="success-title">提交成功！</div>
+            <div class="success-text">
+                感謝您提供名片資訊<br>
+                我們已收到您的資料並為您建檔
+            </div>
         </div>
 
-        <form id="businessForm">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="name">姓名 <span class="required">*</span></label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="englishName">英文名</label>
-                    <input type="text" id="englishName" name="englishName">
-                </div>
+        <!-- 表單內容區域 -->
+        <div class="form-content" id="formContent">
+            <!-- 名片預覽區域 -->
+            <div class="card-preview" id="cardPreview">
+                <div class="card-preview-title">目前名片</div>
+                <img id="previewImage" alt="名片預覽">
             </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="company">公司行號名稱</label>
-                    <input type="text" id="company" name="company">
+            <form id="businessForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">姓名 <span class="required">*</span></label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="englishName">英文名</label>
+                        <input type="text" id="englishName" name="englishName">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="position">職稱</label>
-                    <input type="text" id="position" name="position">
-                </div>
-            </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="email">E-mail信箱 <span class="required">*</span></label>
-                    <input type="email" id="email" name="email" required>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="company">公司行號名稱</label>
+                        <input type="text" id="company" name="company">
+                    </div>
+                    <div class="form-group">
+                        <label for="position">職稱</label>
+                        <input type="text" id="position" name="position">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="phone">電話</label>
-                    <input type="tel" id="phone" name="phone">
-                </div>
-            </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="mobile">手機</label>
-                    <input type="tel" id="mobile" name="mobile">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">E-mail信箱 <span class="required">*</span></label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">電話</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="fax">傳真號碼</label>
-                    <input type="tel" id="fax" name="fax">
-                </div>
-            </div>
 
-            <div class="form-row">
-                <div class="form-group full-width">
-                    <label for="address">公司地址</label>
-                    <textarea id="address" name="address" placeholder="請輸入完整公司地址"></textarea>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="mobile">手機</label>
+                        <input type="tel" id="mobile" name="mobile">
+                    </div>
+                    <div class="form-group">
+                        <label for="fax">傳真號碼</label>
+                        <input type="tel" id="fax" name="fax">
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="website">公司網站</label>
-                    <input type="url" id="website" name="website" placeholder="https://">
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="address">公司地址</label>
+                        <textarea id="address" name="address" placeholder="請輸入完整公司地址"></textarea>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label for="taxNumber">公司統編</label>
-                    <input type="text" id="taxNumber" name="taxNumber">
-                </div>
-            </div>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="lineId">Line ID</label>
-                    <input type="text" id="lineId" name="lineId">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="website">公司網站</label>
+                        <input type="url" id="website" name="website" placeholder="https://">
+                    </div>
+                    <div class="form-group">
+                        <label for="taxNumber">公司統編</label>
+                        <input type="text" id="taxNumber" name="taxNumber">
+                    </div>
                 </div>
-                <div class="form-group">
-                    <!-- 隱藏的 Line User ID -->
-                    <input type="hidden" id="lineUserId" name="lineUserId">
-                </div>
-            </div>
 
-            <div class="form-row">
-                <div class="form-group full-width">
-                    <label for="businessCard">上傳名片</label>
-                    <div class="file-upload">
-                        <div class="file-input">
-                            <span id="fileText">點擊選擇檔案或拖拽到此處</span>
-                            <input type="file" id="businessCard" name="businessCard" accept="image/*,.pdf">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="lineId">Line ID</label>
+                        <input type="text" id="lineId" name="lineId">
+                    </div>
+                    <div class="form-group">
+                        <!-- 隱藏的 Line User ID -->
+                        <input type="hidden" id="lineUserId" name="lineUserId">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="businessCard">上傳名片</label>
+                        <div class="file-upload">
+                            <div class="file-input-display" id="fileInputDisplay">
+                                <div class="upload-icon">📎</div>
+                                <div class="upload-text" id="uploadText">點擊選擇檔案或拖拽到此處</div>
+                                <div class="upload-hint">僅支援圖片上傳，檔案大小限制 5MB</div>
+                            </div>
+                            <input type="file" id="businessCard" name="businessCard" class="file-input-hidden" accept="image/*,.heic,.heif">
                         </div>
                     </div>
                 </div>
+
+                <button type="submit" class="submit-btn">送出表單</button>
+            </form>
+
+            <div class="error-message" id="errorMessage">
+                送出失敗，請稍後再試。
             </div>
-
-            <button type="submit" class="submit-btn">送出表單</button>
-        </form>
-
-        <div class="success-message" id="successMessage">
-            表單已成功送出！
-        </div>
-
-        <div class="error-message" id="errorMessage">
-            送出失敗，請稍後再試。
         </div>
     </div>
 
@@ -397,13 +502,88 @@
             }
         }
 
-        // 檔案上傳處理
-        document.getElementById('businessCard').addEventListener('change', function(e) {
-            const fileText = document.getElementById('fileText');
+        // 檔案上傳處理 - 修正版本
+        const fileInput = document.getElementById('businessCard');
+        const fileInputDisplay = document.getElementById('fileInputDisplay');
+        const uploadText = document.getElementById('uploadText');
+
+        // 點擊上傳區域觸發檔案選擇
+        fileInputDisplay.addEventListener('click', function() {
+            fileInput.click();
+        });
+
+        // 檔案選擇變更事件
+        fileInput.addEventListener('change', function(e) {
             if (e.target.files.length > 0) {
-                fileText.textContent = `已選擇: ${e.target.files[0].name}`;
+                const file = e.target.files[0];
+                
+                // 檢查檔案大小 (5MB = 5 * 1024 * 1024 bytes)
+                const maxSize = 5 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    alert('檔案大小超過 5MB 限制，請選擇較小的檔案');
+                    fileInput.value = '';
+                    return;
+                }
+                
+                // 檢查檔案類型
+                const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif'];
+                if (!validTypes.includes(file.type.toLowerCase())) {
+                    alert('請選擇有效的圖片格式（JPG、PNG、GIF、WebP、HEIC）');
+                    fileInput.value = '';
+                    return;
+                }
+                
+                const fileName = file.name;
+                const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                uploadText.innerHTML = `<span class="file-selected">✓ 已選擇：${fileName} (${fileSize}MB)</span>`;
+                fileInputDisplay.style.borderColor = '#8b6949';
+                fileInputDisplay.style.background = 'rgba(144, 238, 144, 0.1)';
             } else {
-                fileText.textContent = '點擊選擇檔案或拖拽到此處';
+                uploadText.innerHTML = '點擊選擇檔案或拖拽到此處';
+                fileInputDisplay.style.borderColor = '#d2b48c';
+                fileInputDisplay.style.background = 'rgba(255, 255, 255, 0.9)';
+            }
+        });
+
+        // 拖拽功能
+        fileInputDisplay.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('drag-over');
+        });
+
+        fileInputDisplay.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+        });
+
+        fileInputDisplay.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                
+                // 檢查檔案大小 (5MB = 5 * 1024 * 1024 bytes)
+                const maxSize = 5 * 1024 * 1024;
+                if (file.size > maxSize) {
+                    alert('檔案大小超過 5MB 限制，請選擇較小的檔案');
+                    return;
+                }
+                
+                // 檢查檔案類型
+                const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp', 'image/heic', 'image/heif'];
+                
+                if (validTypes.includes(file.type.toLowerCase())) {
+                    fileInput.files = files;
+                    const fileName = file.name;
+                    const fileSize = (file.size / 1024 / 1024).toFixed(2);
+                    uploadText.innerHTML = `<span class="file-selected">✓ 已選擇：${fileName} (${fileSize}MB)</span>`;
+                    this.style.borderColor = '#8b6949';
+                    this.style.background = 'rgba(144, 238, 144, 0.1)';
+                } else {
+                    alert('請選擇有效的圖片格式（JPG、PNG、GIF、WebP、HEIC）');
+                }
             }
         });
 
@@ -445,49 +625,27 @@
                 });
 
                 if (response.ok) {
-                    document.getElementById('successMessage').style.display = 'block';
-                    document.getElementById('errorMessage').style.display = 'none';
-                    form.reset();
-                    document.getElementById('fileText').textContent = '點擊選擇檔案或拖拽到此處';
+                    // 隱藏表單，顯示成功頁面
+                    document.getElementById('formContent').classList.add('hide');
+                    document.getElementById('successPage').classList.add('show');
+                    
+                    // 確保移除任何可能的綠色樣式
+                    const successPage = document.getElementById('successPage');
+                    successPage.style.backgroundColor = 'rgba(255, 248, 240, 0.95)';
+                    successPage.style.border = '3px solid rgba(139, 105, 73, 0.3)';
+                    
+                    window.scrollTo(0, 0);
                 } else {
                     throw new Error('網路錯誤');
                 }
             } catch (error) {
                 document.getElementById('errorMessage').style.display = 'block';
-                document.getElementById('successMessage').style.display = 'none';
                 console.error('送出表單錯誤:', error);
             }
         });
 
         // 頁面載入時執行預填
         document.addEventListener('DOMContentLoaded', prefillForm);
-
-        // 拖拽上傳功能
-        const fileInput = document.querySelector('.file-input');
-        
-        fileInput.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            this.style.borderColor = '#8b6949';
-            this.style.backgroundColor = 'rgba(255, 255, 255, 1)';
-        });
-
-        fileInput.addEventListener('dragleave', function(e) {
-            e.preventDefault();
-            this.style.borderColor = '#d2b48c';
-            this.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-        });
-
-        fileInput.addEventListener('drop', function(e) {
-            e.preventDefault();
-            this.style.borderColor = '#d2b48c';
-            this.style.backgroundColor = 'rgba(255, 255, 255, 0.9)';
-            
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                document.getElementById('businessCard').files = files;
-                document.getElementById('fileText').textContent = `已選擇: ${files[0].name}`;
-            }
-        });
     </script>
 </body>
 </html>
